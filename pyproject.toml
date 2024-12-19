@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "fastapi-boilerplate"
+version = "0.1.0"
+description = "A minimal FastAPI boilerplate app."
+authors = ["Your Name <your.email@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+fastapi = "^0.100.0"
+uvicorn = "^0.22.0"
+
+[tool.poetry.dev-dependencies]
+pytest = "^7.2.0"  # For testing
+black = "^23.0"    # For code formatting
+isort = "^5.12.0"  # For import sorting
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
