@@ -31,7 +31,7 @@ No installs required, no virtualization, no containerization.
      - About busybox: https://www.busybox.net/about.html
      - About busybox Windows executable: https://frippery.org/busybox/
   
-2. Run App Script (.bat & .sh)
+2. Run App Script (.bat)
    - A simple 'hello world' FastAPI app is provided. These scripts run it. Adjust as needed.
    - app/app.py
 
