@@ -2,7 +2,7 @@
 
 # This script sets up a Python and Git environment for cross-platform usage.
 # It detects the platform, downloads required binaries or source code, 
-# and configures the environment.
+# and configures the environment. 
 
 # Exit the script on any error
 set -e

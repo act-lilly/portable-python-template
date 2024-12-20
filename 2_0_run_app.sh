@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Activate the Python virtual environment
+# Activate the Python virtual environment 
 if [ -d "venv/bin" ]; then
   source venv/bin/activate
 else
