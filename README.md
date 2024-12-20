@@ -2,7 +2,15 @@
 Cross-platform template for portable python with pip
 
 # Overview
-This template can be run from Windows, Mac or Linux without leaving a trace. Python does not need to be installed.
+
+---
+## TO DO
+- Currently works for Windows since python embed is a simple solution for Windows
+- Evaluating best options for the least impact to user system for Mac and Ubuntu specifically
+- It does look like building from source with statically linked libraries is most reliable solution but will require user to ensure other libraries are first installed. Looking at the other popular options.
+---
+
+This template can be run from Windows, Mac or Linux without leaving a trace. Python does not need to be installed. **As noted above, Mac and Ubuntu are "in progress"**.
 
 It's meant for quick iteration and testing of apps or new libraries. This can also be used quickly to set up and run an API layer for any need. My primary use is for quick development of FastAPI applications.
 
