@@ -1,16 +1,9 @@
 # portable-python-template
-Cross-platform template for portable python with pip
+Windows template for portable python with pip
 
 # Overview
 
----
-## TO DO
-- Currently works for Windows since python embed is a simple solution for Windows
-- Evaluating best options for the least impact to user system for Mac and Ubuntu specifically
-- It does look like building from source with statically linked libraries is most reliable solution but will require user to ensure other libraries are first installed. Looking at the other popular options.
----
-
-This template can be run from Windows, Mac or Linux without leaving a trace. Python does not need to be installed. **As noted above, Mac and Ubuntu are "in progress"**.
+This template can be run from Windows without leaving a trace. Python does not need to be installed. Standard User account type will work; account does not need to be an Administrator.
 
 It's meant for quick iteration and testing of apps or new libraries. This can also be used quickly to set up and run an API layer for any need. My primary use is for quick development of FastAPI applications.
 
@@ -25,7 +18,7 @@ No installs required, no virtualization, no containerization.
    - Run to download and extract embeddable/portable python, portable pip and portable Git
    - Once Python and Pip are configured, it will create a virtual environment (venv)
    - Within the venv, it will install any dependencies.
-     - It looks for requirements and toml files
+     - It looks for requirements (pip) and toml files (poetry)
      - These file names can be specified in the .env file
    - Note about setup.bat. It will download busybox.exe and then run setup.sh using busybox.
      - About busybox: https://www.busybox.net/about.html
@@ -44,7 +37,7 @@ No installs required, no virtualization, no containerization.
    - pyproject.toml
      - sample file for poetry dependencies
     
-4. Extras for Windows users
+4. Extras
    - activate_virtualenv.bat
      - Open new CMD with venv activated for interactive exploration of the virtual environment
    - install_notepad.bat
