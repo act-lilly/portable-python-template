@@ -1,10 +1,13 @@
 @echo off
 
-:: Activate the Python virtual environment
-call venv\Scripts\activate
+REM Capture the directory where this batch script is located
+set PARENT_DIR=%~dp0
 
-:: Run the FastAPI application, host and port will be managed by app.py
-python app/app.py
+REM Prepend the embeddable Python folder to PATH
+set PATH=%PARENT_DIR%python_embeddable;%PARENT_DIR%python_embeddable\Scripts;%PATH%
 
-:: Pause the terminal to view logs after the script ends
+REM Run the FastAPI (or other) application 
+python %PARENT_DIR%app\app.py
+
+REM Pause the terminal to view logs after the script ends
 pause
