@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# This script installs portable Git, Python, Pip and sets up Venv with additional dependencies installed (e.g. pip, poetry).
-# Target is only Windows platform. Run this script with busybox.exe. See setup.bat for details.
+# This script installs portable Git, Python, Pip and optionally Poetry + any dependencies,
+# *without* creating a dedicated virtual environment. Everything is installed directly into
+# the embeddable Python’s site-packages. Target is Windows. Run via busybox.exe.
 
 ##############################################################################
 # 1. Exit on error, load .env
@@ -28,18 +29,15 @@ GIT_WINDOWS_URL="https://github.com/git-for-windows/git/releases/download/v${GIT
 
 PYTHON_DIR="python_embeddable"
 GIT_DIR="git_embeddable"
-VENV_DIR="venv"
-PYTHON_USER_BASE="$(pwd)/python_user_base"
 
 # (Optional) local directory if you want to store any local wheels, logs, etc.
-CACHE_DIR="$(pwd)/venv_cache"
+CACHE_DIR="$(pwd)/python_cache"
 
 ##############################################################################
 # 3. Environment for isolation & no cache
 ##############################################################################
 export PIP_CONFIG_FILE=NUL        # ignore any global pip config
 export PIP_NO_CACHE_DIR=1         # fully disable pip caching
-export PYTHONUSERBASE="$PYTHON_USER_BASE"
 
 # Add Python + Git to PATH for current shell
 export PATH="$(pwd)/$PYTHON_DIR;$(pwd)/$PYTHON_DIR/Scripts;$(pwd)/$GIT_DIR/cmd;$PATH"
@@ -86,7 +84,7 @@ else
 fi
 
 ##############################################################################
-# 6. Ensure pip is installed globally in the embeddable Python
+# 6. Ensure pip is installed in embeddable Python
 ##############################################################################
 if ! "$PYTHON_EXE" -m pip --version >/dev/null 2>&1; then
     echo "Installing pip into embeddable Python..."
@@ -109,59 +107,39 @@ else
 fi
 
 ##############################################################################
-# 8. Install virtualenv (no cache) in embeddable Python
+# 8. Upgrade pip/setuptools/wheel in the embeddable Python
 ##############################################################################
-"$PYTHON_EXE" -m pip install --no-cache-dir --upgrade virtualenv
-
-##############################################################################
-# 9. Create venv WITHOUT seeding from AppData
-##############################################################################
-if [ ! -d "$VENV_DIR" ]; then
-    echo "Creating a fresh virtual environment at $VENV_DIR (no-seed)..."
-    "$PYTHON_EXE" -m virtualenv --no-seed "$VENV_DIR"
-else
-    echo "Virtual environment already exists at $VENV_DIR"
-fi
-
-##############################################################################
-# 10. Activate venv and manually install pip/setuptools/wheel
-##############################################################################
-. "$VENV_DIR/Scripts/activate"
-
-echo "Verifying Python version in venv..."
-python --version || true
-
-echo "Attempting to install pip/setuptools/wheel from scratch..."
-# If ensurepip is available, do:
+echo "Upgrading pip/setuptools/wheel..."
 if "$PYTHON_EXE" -m ensurepip --help >/dev/null 2>&1; then
     "$PYTHON_EXE" -m ensurepip --upgrade
 else
-    # Fallback: manually install pip/setuptools/wheel
-    pip install --no-cache-dir --upgrade pip setuptools wheel
+    "$PYTHON_EXE" -m pip install --upgrade pip setuptools wheel
 fi
 
-echo "Now pip version in venv is:"
-pip --version
+echo "Current pip version:"
+"$PYTHON_EXE" -m pip --version
 
 ##############################################################################
-# 11. Install dependencies if present
+# 9. Install dependencies if present (requirements.txt)
 ##############################################################################
 if [ -f "$PIP_REQUIREMENTS_FILE" ]; then
     echo "Installing dependencies from $PIP_REQUIREMENTS_FILE..."
-    pip install --no-cache-dir -r "$PIP_REQUIREMENTS_FILE"
+    "$PYTHON_EXE" -m pip install -r "$PIP_REQUIREMENTS_FILE"
 else
     echo "No $PIP_REQUIREMENTS_FILE found. Skipping dependencies."
 fi
 
-# --- NEW: Set Poetry environment variables before installing Poetry ---
+##############################################################################
+# 10. (Optional) Install Poetry if pyproject.toml is present
+##############################################################################
 export POETRY_HOME="$(pwd)/.poetry_home"
 export POETRY_CACHE_DIR="$(pwd)/.poetry_cache"
+# We’ll let Poetry install into the global (embeddable) environment instead of creating its own venv.
 export POETRY_VIRTUALENVS_CREATE=false
 
 if [ -f "$POETRY_TOML_FILE" ]; then
-    echo "Installing Poetry & dependencies from $POETRY_TOML_FILE..."
-    pip install --no-cache-dir poetry
-
+    echo "Installing Poetry & installing dependencies from $POETRY_TOML_FILE..."
+    "$PYTHON_EXE" -m pip install poetry
     poetry config virtualenvs.create false
     poetry config cache-dir "$POETRY_CACHE_DIR"
     poetry install
@@ -170,7 +148,7 @@ else
 fi
 
 ##############################################################################
-# 12. Deactivate & done
+# 11. Done
 ##############################################################################
-deactivate
-echo "Setup complete. Venv is located at: $VENV_DIR"
+echo "Setup complete! You can now use Python via: $PYTHON_EXE"
+echo "Packages are installed directly in the embeddable Python environment."
