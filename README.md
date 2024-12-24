@@ -1,5 +1,5 @@
 # portable-python-template
-Windows template for portable python with pip
+Windows template for portable python with pip and poetry
 
 # Overview
 
@@ -16,9 +16,9 @@ No installs required, no virtualization, no containerization.
 ## How it works
 1. Setup Script (.bat & .sh)
    - Run to download and extract embeddable/portable python, portable pip and portable Git
-   - Once Python and Pip are configured, it will create a virtual environment (venv)
-   - Within the venv, it will install any dependencies.
-     - It looks for requirements (pip) and toml files (poetry)
+   - Once Python and Pip are configured, other dependencies are also installed and contained to parent directory
+   - Note about dependencies:
+     - Install script looks for requirements (pip) and toml files (poetry)
      - These file names can be specified in the .env file
    - Note about setup.bat. It will download busybox.exe and then run setup.sh using busybox.
      - About busybox: https://www.busybox.net/about.html
@@ -39,7 +39,7 @@ No installs required, no virtualization, no containerization.
     
 4. Extras
    - activate_virtualenv.bat
-     - Open new CMD with venv activated for interactive exploration of the virtual environment
+     - Open new CMD with env vars needed to run portable python
    - install_notepad.bat
      - Have a portable version of Notepad++ ready in a few seconds
      - Useful if using Windows Sandbox feature (temp Windows environment)
