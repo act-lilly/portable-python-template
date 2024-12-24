@@ -3,16 +3,13 @@
 :: Change to the directory where this batch script is located
 cd /d %~dp0
 
-:: Change to the Scripts directory inside the virtual environment
-cd venv\Scripts
+:: Add venv/Scripts to the PATH environment variable temporarily
+set PATH=%~dp0venv\Scripts;%PATH%
 
 :: Activate the Python virtual environment
-call activate
+call venv\Scripts\activate
 
-:: Navigate back to the base directory where the app is located
-cd ../..
-
-:: Run the FastAPI application, host and port will be managed by app.py
+:: Run the FastAPI application
 python app/app.py
 
 :: Pause the terminal to view logs after the script ends
