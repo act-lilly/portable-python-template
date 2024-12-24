@@ -2,11 +2,8 @@
 REM Change to the directory where this batch script is located
 cd /d %~dp0
 
-REM Change to the Scripts directory inside the virtual environment
-cd venv\Scripts
+REM Prepend the embeddable Python folder to PATH
+set PATH=%~dp0python_embeddable;%~dp0python_embeddable\Scripts;%PATH%
 
-REM Activate the virtual environment
-call activate
-
-REM Open a new Command Prompt
+REM Open a new Command Prompt with the updated environment
 cmd

@@ -1,16 +1,13 @@
 @echo off
 
-:: Capture the directory where this batch script is located
+REM Capture the directory where this batch script is located
 set PARENT_DIR=%~dp0
 
-:: Change to the Scripts directory inside the virtual environment
-cd /d %PARENT_DIR%venv\Scripts
+REM Prepend the embeddable Python folder to PATH
+set PATH=%PARENT_DIR%python_embeddable;%PARENT_DIR%python_embeddable\Scripts;%PATH%
 
-:: Activate the Python virtual environment
-call activate
+REM Run the FastAPI (or other) application 
+python %PARENT_DIR%app\app.py
 
-:: Run the FastAPI application using the parent directory path
-python %PARENT_DIR%app/app.py
-
-:: Pause the terminal to view logs after the script ends
+REM Pause the terminal to view logs after the script ends
 pause
