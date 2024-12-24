@@ -1,16 +1,16 @@
 @echo off
 
-:: Change to the directory where this batch script is located
-cd /d %~dp0
+:: Capture the directory where this batch script is located
+set PARENT_DIR=%~dp0
 
-:: Add venv/Scripts to the PATH environment variable temporarily
-set PATH=%~dp0venv\Scripts;%PATH%
+:: Change to the Scripts directory inside the virtual environment
+cd /d %PARENT_DIR%venv\Scripts
 
 :: Activate the Python virtual environment
-call venv\Scripts\activate
+call activate
 
-:: Run the FastAPI application
-python app/app.py
+:: Run the FastAPI application using the parent directory path
+python %PARENT_DIR%app/app.py
 
 :: Pause the terminal to view logs after the script ends
 pause
